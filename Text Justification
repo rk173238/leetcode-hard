@@ -1,0 +1,81 @@
+class Solution {
+public:
+    string solve(string s,int k){
+        vector<string> arr;
+        int i=0;
+        string ss = "";
+        int sum = 0;
+        while(i<s.size()){
+            
+            if(s[i] == ' '){
+                sum += ss.size();
+                arr.push_back(ss);
+                ss = "";
+            }else{
+                ss += s[i];
+            }
+            i++;
+        }
+        arr.push_back(ss);
+        sum += ss.size();
+        
+        int space = k-sum;
+        int put = arr.size()-1;
+
+        if(put==0) put = 1;
+        // cout<<space<<" "<<put<<endl;
+        int each = space/put;
+        int first = (space%put);
+        if(arr.size() == 1) first = each;
+        ss = arr[0];
+        for(i=1;i<arr.size();i++){
+            if(first>0){
+                ss += " ";
+                first--;
+            }
+            put  = each; 
+            while(put--){
+                ss += " ";
+            }
+            ss += arr[i];
+        }
+        // cout<<first<<endl;
+        while(first-- > 0){
+            ss += " ";
+        }
+        return ss;
+    }
+
+    vector<string> fullJustify(vector<string>& arr, int k) {
+        vector<string> ans;
+        int i=0;
+        int sum = 0;
+        string s = "";
+        while(i<arr.size()){
+            if(s  == ""){
+                s = arr[i];
+                i++;
+                continue;
+            }
+            if(s.size()+arr[i].size()+1 > k){
+                ans.push_back(s);
+                s = "";
+                continue;
+            }
+            s = s + " " + arr[i];
+            i++;
+        }
+        if(s.size()) ans.push_back(s);
+
+        for(i=0;i<ans.size()-1;i++){
+            ans[i] = solve(ans[i],k);
+        }
+        s = ans[ans.size()-1];
+        k = k-s.size();
+        while(k--){
+            s = s + " ";
+        }
+        ans[ans.size()-1] = s;
+        return ans;
+    }
+};
