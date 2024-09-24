@@ -1,0 +1,38 @@
+class Solution {
+public:
+
+    bool solve(int i,int j,string s,string p,vector<vector<int>>& dp){
+        if(j>=p.size()){
+            if(i<s.size()) return false;
+            return true;
+        }
+        if(i>=s.size()){
+            while(j<p.size()){
+                if(p[j] != '*') return false;
+                j++;
+            }
+            return true;
+        }
+        if(dp[i][j] != -1) return dp[i][j];
+        if(p[j] != '*'){
+            if(p[j] == '?' || p[j] == s[i]) return solve(i+1,j+1,s,p,dp);
+            return false;
+        }
+
+        bool a = solve(i,j+1,s,p,dp);
+        if(a) return dp[i][j] =  true;
+        bool b = solve(i+1,j,s,p,dp);
+        return dp[i][j] =  b;
+        // bool c = solve(i+1,j+1,s,p,dp);
+        // return dp[i][j] = c;
+
+    }
+    bool isMatch(string s, string p) {
+        vector<vector<int>> dp(s.size(),vector<int>(p.size(),-1));
+        return solve(0,0,s,p,dp);
+    }
+};
+
+
+// aa
+// aaaa*
